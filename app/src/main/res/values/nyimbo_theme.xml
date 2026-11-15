@@ -1,0 +1,21 @@
+<resources>
+    <style name="TunelystTheme" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:fontFamily">sans</item>
+        <item name="android:windowActionModeOverlay">true</item>
+        <item name="android:scrollbarSize">0dp</item>
+        <item name="colorPrimary">#FFDF00</item>
+        <item name="colorOnPrimary">#000000</item>
+        <item name="colorPrimaryContainer">#443100</item>
+        <item name="colorOnPrimaryContainer">#FFF1C3</item>
+        <item name="colorSecondary">#FFD34B</item>
+        <item name="colorOnSecondary">#000000</item>
+        <item name="colorSurface">#000000</item>
+        <item name="colorOnSurface">#FFFFFF</item>
+        <item name="colorSurfaceVariant">#161616</item>
+        <item name="colorOnSurfaceVariant">#BEBEBE</item>
+    </style>
+    <style name="TunelystLaunchTheme" parent="TunelystTheme">
+        <item name="android:windowBackground">@drawable/tunelyst_splash_background</item>
+    </style>
+    <style name="NyimboDeviceColors" parent="ThemeOverlay.Material3.DynamicColors.Dark" />
+</resources>

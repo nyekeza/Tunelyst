@@ -1,0 +1,6 @@
+<resources>
+    <style name="TunelystLaunchTheme" parent="TunelystTheme">
+        <item name="android:windowBackground">@drawable/tunelyst_splash_background</item>
+        <item name="android:windowSplashScreenBackground">#000000</item>
+    </style>
+</resources>
