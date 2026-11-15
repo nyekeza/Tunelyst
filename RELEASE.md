@@ -1,6 +1,6 @@
 # Preparing a Tunelyst release
 
-Tunelyst is public. A new version tag starts a build and creates a **draft** release; it does not publish the release automatically. Review and test the draft before publishing it.
+Tunelyst is public. A new version tag starts a build and publishes the release automatically if the checks pass. Test your changes and check the version before pushing the tag.
 
 ## Protect the signing key
 
@@ -25,12 +25,12 @@ Set them under **Settings → Secrets and variables → Actions**. Do not print 
 2. Increase `versionCode` and update `versionName` in `app/build.gradle.kts`.
 3. Test the changes, then commit and push the reviewed source.
 4. Create and push a matching tag, such as `v1.0.1`. The workflow accepts tags in the form `vMAJOR.MINOR.PATCH`.
-5. Check the Actions run. It builds and signs one APK, checks the version and signature, and creates a draft with the APK and checksum. If native libraries are included, it checks support for 32-bit and 64-bit ARM and x86.
+5. Check the Actions run. It builds and signs one APK, checks the version and signature, and publishes it with a checksum. If native libraries are included, it checks support for 32-bit and 64-bit ARM and x86.
 
-## Check and publish
+## Check the release
 
-Download the signed APK and checksum from the draft. Check the checksum and compare the signing certificate with the one recorded for the release key. Test the APK on real devices, including music access, playback, playlists, background playback, and reopening the app. Test a range of devices and library sizes where possible.
+After publishing, download the APK and checksum from the release. Check the checksum and compare the signing certificate with the one recorded for the release key. Testing the signed APK on real devices is recommended; it can behave differently from a debug build.
 
-Review the title and notes, then publish the draft when ready. The APK needs Android 10 or later. The mapping file is retained as a workflow artifact for 90 days; consider its visibility before storing it elsewhere.
+Check the release notes and edit them if needed. The APK needs Android 10 or later. The mapping file is retained as a workflow artifact for 90 days; consider its visibility before storing it elsewhere.
 
 For optional local signing, the build supports the `TUNELYST_KEYSTORE_FILE`, `TUNELYST_STORE_PASSWORD`, `TUNELYST_KEY_ALIAS`, and `TUNELYST_KEY_PASSWORD` environment variables, or a private untracked `release.properties`. Supply all four values. Never distribute an unsigned APK as an official release; verify the signature first.

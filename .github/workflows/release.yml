@@ -1,4 +1,4 @@
-name: Draft Android release
+name: Publish Android release
 
 on:
   push:
@@ -63,14 +63,14 @@ jobs:
           asset="Tunelyst-$GITHUB_REF_NAME.apk"
           cp "$apk" "release-files/$asset"
           (cd release-files && sha256sum "$asset" > "$asset.sha256")
-      - name: Save R8 mapping privately with the workflow run
+      - name: Save R8 mapping with the workflow run
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: r8-mapping-${{ github.ref_name }}
           path: app/build/outputs/mapping/release/mapping.txt
           if-no-files-found: error
           retention-days: 90
-      - name: Create a draft GitHub release
+      - name: Publish the GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -78,8 +78,10 @@ jobs:
           set -euo pipefail
           asset="Tunelyst-$GITHUB_REF_NAME.apk"
           cat > "$RUNNER_TEMP/tunelyst-release-notes.txt" <<'NOTES'
-          Draft release. Test the signed APK on real devices before publishing.
-          Check library access, playback and background controls, sharing, search, and reopen behavior.
+          Your music deserves a beautiful home.
+
+          Download Tunelyst below and enjoy your music.
+          Requires Android 10 or later.
           NOTES
           gh release create "$GITHUB_REF_NAME" "release-files/$asset" "release-files/$asset.sha256" \
-            --verify-tag --draft --title "Tunelyst $GITHUB_REF_NAME" --notes-file "$RUNNER_TEMP/tunelyst-release-notes.txt"
+            --verify-tag --latest --title "Tunelyst ${GITHUB_REF_NAME#v}" --notes-file "$RUNNER_TEMP/tunelyst-release-notes.txt"
