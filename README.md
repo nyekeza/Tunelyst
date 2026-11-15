@@ -1,28 +1,30 @@
-# Tunelyst
+<p align="center">
+  <img src="app/src/main/res/drawable-nodpi/tunelyst_icon.png" width="100" alt="Tunelyst icon">
+</p>
 
-Your music, your way.
+<h1 align="center">Tunelyst</h1>
 
-Tunelyst is an Android music player for the songs stored on your phone. Browse your collection, make playlists, and enjoy your music.
+<p align="center">
+  Your music deserves a beautiful home.
+</p>
+
+Tunelyst brings the songs on your phone together in one place, making your collection easy to explore and a joy to play.
+
+## Your music, your way
+
+- **Explore your collection** by song, album, artist, or folder.
+- **Make it yours** with playlists and liked songs.
+- **Rediscover your favorites** with Smart Shuffle.
+- **Listen at your own pace** with a sleep timer.
 
 ## Download
 
-Get the latest version from [Releases](../../releases/latest).
+[Download Tunelyst](https://github.com/nyekeza/Tunelyst/releases/latest)
 
-Tunelyst requires Android 10 or later. Allow access to your music when prompted.
+Tunelyst works on Android 10 and later. Download the APK from the release page, open it on your phone, and follow the installation prompts. When you open Tunelyst, allow access to your music.
 
-## Features
-
-- Browse songs, albums, artists, and folders
-- Create playlists and save your favorites
-- Use Smart Shuffle to mix things up
-- Set a sleep timer
-
-## Installing
-
-Download the APK from the release page and open it on your phone. You may need to allow your browser or file manager to install apps.
-
-If you have an older copy signed with a different key, Android may not let you update it. Removing that copy may erase its local data.
+If Android won't update an older copy of Tunelyst, it may have been signed with a different key. Removing that copy can erase its local data, so check your playlists and settings first.
 
 ## Feedback
 
-Found a problem or have an idea? Please open an issue.
+Have an idea or found a problem? [Open an issue](https://github.com/nyekeza/Tunelyst/issues). Your feedback is welcome.
