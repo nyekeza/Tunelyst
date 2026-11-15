@@ -1,0 +1,31 @@
+name: Report a problem
+description: Tell us what went wrong.
+title: "Problem: "
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      placeholder: Tell us what you saw and what you expected.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: How can we see the problem?
+      placeholder: List the steps you took.
+  - type: input
+    id: app-version
+    attributes:
+      label: Tunelyst version
+      placeholder: For example, 1.0.0
+  - type: input
+    id: phone
+    attributes:
+      label: Phone and Android version
+      placeholder: For example, Galaxy A series, Android 14
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else?
+      description: Screenshots can help. Please don't share private information.

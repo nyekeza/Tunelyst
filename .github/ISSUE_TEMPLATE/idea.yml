@@ -1,0 +1,16 @@
+name: Share an idea
+description: Suggest a way to make Tunelyst better.
+title: "Idea: "
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: What's your idea?
+      placeholder: Tell us what you'd like to see.
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why would it be helpful?
+      placeholder: Tell us how you'd use it.

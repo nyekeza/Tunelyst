@@ -34,6 +34,10 @@ Tunelyst works on Android 10 and later. Download the APK from the release page, 
 
 If Android won't update an older copy of Tunelyst, it may have been signed with a different key. Removing that copy can erase its local data, so check your playlists and settings first.
 
+## Help and privacy
+
+Need a hand? Visit [Help](HELP.md). Learn how Tunelyst handles your music and app data in our [privacy note](PRIVACY.md).
+
 ## Feedback
 
 Have an idea or found a problem? [Open an issue](https://github.com/nyekeza/Tunelyst/issues). Your feedback is welcome.
