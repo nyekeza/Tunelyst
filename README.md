@@ -10,6 +10,15 @@
 
 Tunelyst brings the songs on your phone together in one place, making your collection easy to explore and a joy to play.
 
+## A look inside
+
+<p align="center">
+  <img src="docs/screenshots/home.jpg" width="200" alt="Tunelyst home screen">
+  <img src="docs/screenshots/liked-songs.jpg" width="200" alt="Liked songs">
+  <img src="docs/screenshots/player.jpg" width="200" alt="Music player">
+  <img src="docs/screenshots/queue.jpg" width="200" alt="Upcoming songs">
+</p>
+
 ## Your music, your way
 
 - **Explore your collection** by song, album, artist, or folder.
