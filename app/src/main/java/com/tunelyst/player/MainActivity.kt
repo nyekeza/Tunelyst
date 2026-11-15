@@ -507,6 +507,7 @@ class MainActivity : AppCompatActivity() {
         override fun rows(rows: List<LibraryListAdapter.Row>, songs: List<Track>) = setLibraryRows(rows, songs)
         override fun openGroup(name: String, group: List<Track>) = this@MainActivity.openGroup(name, group)
         override fun setQuery(value: String) { searchInput.setText(value); searchInput.setSelection(value.length) }
+        override fun recentSearches(queries: List<String>) = renderRecentSearches(queries)
         override fun recentlySearchedSongs() = renderRecentlySearchedSongs()
         override fun render() = this@MainActivity.render()
     }) }
@@ -1175,9 +1176,7 @@ class MainActivity : AppCompatActivity() {
         if (screen == "Settings") { renderSettings(); return }
         if (screen == "Player") { renderPlayer(); return }
         if (!hasAccess()) {
-            stateCard("Your music belongs here", "Allow access to audio on this device to build your offline library. Tunelyst does not stream music.")
-            content.addView(button("Allow audio access") { requestAccess() })
-            content.addView(button("Open app settings") { startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:$packageName"))) })
+            renderMusicAccessWelcome()
             return
         }
         if (loading) {
@@ -1380,6 +1379,67 @@ class MainActivity : AppCompatActivity() {
         content.addView(label(detail, 12f, muted).apply { setPadding(0, 0, 0, dp(14)) })
     }
     private fun artworkShape(key: String): GradientDrawable = PlaceholderArtwork.gradient(key, dp(12).toFloat())
+    /** A compact list of search terms; separate from recently played or searched songs. */
+    private fun renderRecentSearches(queries: List<String>) {
+        val heading = row()
+        heading.addWeighted(label("Recent searches", 18f, onSurface, true))
+        heading.addView(button("Clear all") { searchPreferences.clear(); render() }.apply {
+            contentDescription = "Clear recent searches"
+            setTextColor(accent)
+        }, LinearLayout.LayoutParams(-2, dp(48)))
+        content.addView(heading, LinearLayout.LayoutParams(-1, -2))
+        val list = col().apply {
+            background = shape(surface, 18)
+            setPadding(dp(4), dp(4), dp(4), dp(4))
+        }
+        queries.forEach { value ->
+            val item = row().apply {
+                background = pressable(surface, 14)
+                setPadding(dp(12), 0, dp(12), 0)
+                contentDescription = "Search again for $value"
+                isFocusable = true
+                setOnClickListener { searchInput.setText(value); searchInput.setSelection(value.length); searchPreferences.remember(value) }
+            }
+            val icon = ImageView(this).apply {
+                setImageDrawable(ContextCompat.getDrawable(context, R.drawable.ny_history))
+                imageTintList = ColorStateList.valueOf(muted)
+                importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+            }
+            item.addView(icon, LinearLayout.LayoutParams(dp(20), dp(20)).apply { marginEnd = dp(14) })
+            item.addWeighted(label(value, 15f, onSurface).apply {
+                maxLines = 1; ellipsize = android.text.TextUtils.TruncateAt.END
+                importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+            })
+            list.addView(item, LinearLayout.LayoutParams(-1, dp(48)))
+        }
+        content.addView(list, LinearLayout.LayoutParams(-1, -2).apply { bottomMargin = dp(16) })
+    }
+
+    /** Explain music access before Android shows its own permission dialog. */
+    private fun renderMusicAccessWelcome() {
+        val card = col().apply {
+            gravity = Gravity.CENTER_HORIZONTAL
+            background = shape(surface, 24)
+            setPadding(dp(24), dp(28), dp(24), dp(24))
+        }
+        card.addView(label("Your music belongs here", 22f, onSurface, true).apply {
+            gravity = Gravity.CENTER
+        }, LinearLayout.LayoutParams(-1, -2))
+        card.addView(label("Allow music access to find and play songs already on your phone.", 15f, muted).apply {
+            gravity = Gravity.CENTER
+        }, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(10) })
+        card.addView(label("Your music stays on your device.", 13f, muted).apply {
+            gravity = Gravity.CENTER
+        }, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(12) })
+        card.addView(button("Allow music access") { requestAccess() }.apply {
+            textSize = 15f; setTextColor(onAccent); background = pressable(accent, 18)
+        }, LinearLayout.LayoutParams(-1, dp(52)).apply { topMargin = dp(22) })
+        card.addView(button("Open app settings") {
+            startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:$packageName")))
+        }.apply { setTextColor(onSurface) }, LinearLayout.LayoutParams(-1, dp(48)).apply { topMargin = dp(8) })
+        content.addView(card, LinearLayout.LayoutParams(-1, -2).apply { topMargin = dp(12) })
+    }
+
     private fun stateCard(title: String, detail: String, busy: Boolean = false) {
         val box = col().apply {
             background = shape(surface, 24).apply { setStroke(dp(1).coerceAtLeast(1), 0x1affffff) }; setPadding(dp(20), dp(20), dp(20), dp(20))

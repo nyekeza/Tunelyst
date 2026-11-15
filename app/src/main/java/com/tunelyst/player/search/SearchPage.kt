@@ -23,6 +23,7 @@ internal class SearchPage(private val host: Host) {
         fun rows(rows: List<LibraryListAdapter.Row>, songs: List<Track>)
         fun openGroup(name: String, group: List<Track>)
         fun setQuery(value: String)
+        fun recentSearches(queries: List<String>)
         fun recentlySearchedSongs()
         fun render()
     }
@@ -44,11 +45,7 @@ internal class SearchPage(private val host: Host) {
             }
         } else {
             val recent = preferences.recent()
-            if (recent.isNotEmpty()) {
-                content.addView(label("Recent searches", 18f, muted))
-                recent.forEach { value -> content.addView(button(value) { setQuery(value); preferences.remember(value) }) }
-                content.addView(button("Clear recent searches") { preferences.clear(); host.render() })
-            }
+            if (recent.isNotEmpty()) recentSearches(recent)
             if (category == "All" || category == "Songs") recentlySearchedSongs()
             else stateCard("Search ${category.lowercase()}", "Enter a name in the search bar above.")
         }

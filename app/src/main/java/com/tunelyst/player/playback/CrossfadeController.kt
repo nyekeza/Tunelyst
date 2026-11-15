@@ -39,6 +39,7 @@ internal class CrossfadeController(context: Context, private val player: ExoPlay
     private var fadeDuration = 0L
     private var retryAfter = 0L
     private var lastResyncAt = 0L
+    private val maxHandoffDriftMs = 30L
     private var shareAudioSession = true
     private var closed = false
     private var suppressed = false
@@ -130,11 +131,11 @@ internal class CrossfadeController(context: Context, private val player: ExoPlay
         } else {
             val factor = when {
                 delta < -150 -> 1.50f
-                delta < -100 -> 1.25f
-                delta < -35 -> 1.10f
+                delta < -30 -> 1.25f
+                delta < -10 -> 1.10f
                 delta > 150 -> 0.50f
-                delta > 100 -> 0.75f
-                delta > 35 -> 0.90f
+                delta > 30 -> 0.75f
+                delta > 10 -> 0.90f
                 else -> 1f
             }
             val speed = (player.playbackParameters.speed * factor).coerceIn(0.1f, 8f)
@@ -142,7 +143,7 @@ internal class CrossfadeController(context: Context, private val player: ExoPlay
         }
         val manual = pending
         if (manual != null) {
-            if (abs(delta) <= 150) {
+            if (abs(delta) <= maxHandoffDriftMs) {
                 pending = null
                 val remaining = ((player.duration - player.currentPosition).coerceAtLeast(0) / player.playbackParameters.speed).toLong()
                 val ms = minOf(CrossfadePreferences.duration(app, false).toLong(), remaining)
@@ -155,7 +156,7 @@ internal class CrossfadeController(context: Context, private val player: ExoPlay
         val overlap = CrossfadePolicy.overlapMs(CrossfadePreferences.duration(app, true), player.duration,
             player.playbackParameters.speed, player.repeatMode == Player.REPEAT_MODE_ONE, validNext(next))
         val remaining = ((player.duration - player.currentPosition).coerceAtLeast(0) / player.playbackParameters.speed).toLong()
-        if (overlap > 0 && remaining <= overlap + 40 && remaining > 40 && abs(delta) <= 150) {
+        if (overlap > 0 && remaining <= overlap + 40 && remaining > 40 && abs(delta) <= maxHandoffDriftMs) {
             val targetId = player.getMediaItemAt(next).mediaId
             start(next, targetId, minOf(overlap, remaining), automatic = true) { player.seekTo(next, 0L) }
         }
@@ -177,7 +178,7 @@ internal class CrossfadeController(context: Context, private val player: ExoPlay
         if (ms <= 0 || !canPrepare() || remaining <= 100) { cancel(); return command() }
         val ready = second != null && second.playerError == null && second.isPlaying &&
             second.playbackState == Player.STATE_READY && outgoingIndex == player.currentMediaItemIndex &&
-            outgoingId == player.currentMediaItem?.mediaId && abs(second.currentPosition - player.currentPosition) <= 150
+            outgoingId == player.currentMediaItem?.mediaId && abs(second.currentPosition - player.currentPosition) <= maxHandoffDriftMs
         if (ready) return start(targetIndex, targetId, minOf(ms.toLong(), remaining), automatic = false, command = command)
         // A failed or stale copy cannot become synchronized; rebuild it on the next tick.
         if (second != null && (second.playerError != null || outgoingIndex != player.currentMediaItemIndex || outgoingId != player.currentMediaItem?.mediaId)) cancel()
